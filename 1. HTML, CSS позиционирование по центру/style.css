@@ -1,0 +1,34 @@
+*{
+  padding: 0;
+  margin: 0;
+}
+
+
+body{
+  height: 100%;
+}
+
+.center-block{
+  width: 20%;
+  height: 100px;  
+}
+
+.center-float{
+  float: left;
+}
+
+.flex{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.grid{
+  display: grid;
+  grid-template-columns: 20%;
+  grid-template-rows: 100px;
+  grid-auto-flow: column;
+}
+
+.center-inline{
+  display: inline-block;
+}
