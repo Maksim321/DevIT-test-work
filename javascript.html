@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>JS work</title>
+    <style>
+  	
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+	let testData = [1, 2, 1990, 85, 24, "Vasya", "colya@example.com", "Rafshan", "ashan@example.com", true, false];
+	let testData2 = [1, 2, 1990, 85, 24, 5, 7, 8.1];
+	let testData3 = [{"name":"Vasya","email":"vasya@example.com","age":20,"skills":{"php":0,"js":-1,"madness":10,"rage":10}},{"name":"Dima","email":"dima@example.com","age":34,"skills":{"php":5,"js":7,"madness":3,"rage":2}},{"name":"Colya","email":"colya@example.com","age":46,"skills":{"php":8,"js":-2,"madness":1,"rage":4}},{"name":"Misha","email":"misha@example.com","age":16,"skills":{"php":6,"js":6,"madness":5,"rage":2}},{"name":"Ashan","email":"ashan@example.com","age":99,"skills":{"php":0,"js":10,"madness":10,"rage":1}},{"name":"Rafshan","email":"rafshan@example.com","age":11,"skills":{"php":0,"js":0,"madness":0,"rage":10}}];
+	let testData4 = [{"name":"Vasya","email":"vasya@example.com","age":20.5},{"name":"Dima","email":"dima@example.com","age":34},{"name":"Colya","email":"colya@example.com","age":46},{"name":"Misha","email":"misha@example.com","age":16},{"name":"Ashan","email":"ashan@example.com","age":99},{"name":"Rafshan","email":"rafshan@example.com","age":11},1.1,2,1990,85,24,"Vasya","colya@example.com","Rafshan","ashan@example.com",true,false,[[[[1,2,1990,85,24,"Vasya","colya@example.com","Rafshan","ashan@example.com",true,false,[{"name":"Rafshan","email":"rafshan@example.com","age":11}]]]]]];
+
+console.log("//////////////////////////////////////////////////////////////////////");
+		console.log("1. Напишите функцию cloneDeep таким образом, чтобы она была способна клонировать переданный как параметр объект.");
+		let testObj = {
+		  key1: "test",
+		  key2: {
+		    key3: "test2",
+		    key4: 100,
+			key5: {
+			    key6: 200,
+			    key7: 400
+			}
+		  }
+		};
+
+    	function cloneDeep(obj){
+    		let objClone = {};
+    		for (key in obj)
+    			if(typeof obj[key] == "object")
+    				objClone[key] = cloneDeep(obj[key]); 
+    			else 
+    				objClone[key] = obj[key]; 
+    		return objClone;
+    	}
+    	let newObj = cloneDeep(testObj);
+		console.log(newObj);
+		console.log(testObj.key2 == newObj.key2, testObj.key2.key5 == newObj.key2.key5);
+
+
+console.log("//////////////////////////////////////////////////////////////////////");
+
+    	console.log("2. Свертка. Используйте метод reduce в комбинации с concat для свёртки массива массивов в один массив, у которого есть все элементы входных массивов.");
+
+    	var arrays1 = [[1, 2, 3], [4, 5], [6], [[7], [8], [[9], [10]]]];
+    	var arrays2 = [1, [2, [3]], 100, [4, 5], [6], [[7], [8], [[9], [10]]]];
+
+     	function concatArray(arr){
+    		return arr.reduce((accum, curr) => {
+	    		if(Array.isArray(curr))
+	    			return accum.concat(concatArray(curr));
+	    		else
+	    			return accum.concat(curr);	    			
+    		}, []);
+    	}   	
+
+		console.log(concatArray(arrays1));
+    	console.log(concatArray(arrays2));
+
+console.log("//////////////////////////////////////////////////////////////////////");
+
+    	console.log("3. Допустим, у вас есть функция primitiveMultiply, которая в 50% случаев перемножает 2 числа, а в остальных случаях выбрасывает исключение типа MultiplicatorUnitFailure. Напишите функцию, обёртывающую эту, и просто вызывающую её до тех пор, пока не будет получен успешный результат.");
+
+		function MultiplicatorUnitFailure() {}
+		function primitiveMultiply(a, b) {
+			if (Math.random() < 0.5)
+		    	return a * b;
+		  	else
+		    	throw new MultiplicatorUnitFailure();
+		}
+		function reliableMultiply(a, b) {
+			try{
+				return primitiveMultiply(a, b);
+		  	} catch (err) {
+				console.log("exception");
+      			return reliableMultiply(a, b);
+		  	}
+		}
+
+		for (i in [1, 2, 3, 4, 5])
+			console.log(reliableMultiply(i, 10));
+
+console.log("//////////////////////////////////////////////////////////////////////");
+
+		console.log("4. Расширить прототип Array, добавив к нему метод добавления элемента в начало без использование unshift.");
+
+		var arr = [1, 2, 3];
+
+		Object.defineProperty(Array.prototype, 'append', {
+		    value: function(new_elem) { 
+		    	for( let i = this.length-1; i>=0; i--){
+		    		this[i+1] = this[i];
+		    	}
+		    	this[0] = new_elem;
+		    	return this.length;
+		    }
+		});
+		console.log(arr.append(9));
+		console.log(arr.append(8));
+		console.log(arr.append(7));
+
+		console.log(arr);
+
+console.log("//////////////////////////////////////////////////////////////////////");
+
+		console.log("5. Выведите все элементы массива используя рекурсию.");
+
+		var arr5 = ['Solnce', 'vishlo', 'iz', 'za', 'tuchi']; 
+		function recuseLog(arr, index = 0) {
+			if(arr5.length <= index) return 0; 
+			console.log(arr5[index]);
+			recuseLog(arr5, index+1);
+		}
+
+		recuseLog(arr5);
+
+console.log("//////////////////////////////////////////////////////////////////////");
+
+		console.log("6. Написать функцию для выполнения параллельных вычислений без использования Promise.");
+
+		var a = function(one, two) {
+		  return one + two
+		}
+		var b = function() {
+		  return false;
+		}
+
+		function paralell(arr, callback){
+			let arrResult = [];
+			arr.forEach((e)=>{
+				e[1] ? arrResult.push(e[0](...e[1])) : arrResult.push(e[0]());
+			});
+			callback(arrResult);
+		}
+
+		paralell([[a, [1, 2]], [b]], function(results) {
+			console.log(results); // [3, false]
+		});
+
+		paralell([[a, [1, 2]], [b], [a, [5, 2]]], function(results) {
+			console.log(results);
+		});		
+
+console.log("//////////////////////////////////////////////////////////////////////");
+
+		console.log("7. Сделать функцию поиска значений в массиве.");
+
+//Синтаксис: array_find(arr: array, search: string|regex): string|number[]|null
+//Пример: 
+//let result = array_find(testData, '/^raf.*/i') // ["Rafshan"]
+//let result2 = array_find(testData, "Rafshan") // ["Rafshan"]
+
+		function array_find(arr, search){
+			return arr.reduce((accum, curr)=>{
+				try{
+					if(typeof curr === "string" && eval(search).test(curr))
+						accum.push(curr);
+					return accum;
+				} catch (err) {
+					if(typeof curr == "string" && curr === search)
+						accum.push(curr);
+					return accum;
+				}
+			}, []);
+		}
+
+
+		console.log(array_find(testData, '/^raf.*/i'));
+		console.log(array_find(testData, "Rafshan"));		
+		console.log(array_find(testData, "/^raaf.*/i"));	
+
+console.log("//////////////////////////////////////////////////////////////////////");
+
+		console.log("8.Сделать функцию которая обрезает массив до указанного значения.");
+
+//Синтаксис: array_skip_until(arr: array, value: any): any[]
+//Пример: 
+//let result = array_skip_until(testData, 2) // [2, 1990, 85, 24, "Vasya", "colya@example.com", "Rafshan", "ashan@example.com", true, false]
+//let result2 = array_skip_until(testData, "Rafshan") // ["Rafshan", "ashan@example.com", true, false]
+//let result3 = array_skip_until(testData, "asd") // []
+
+		function array_skip_until(arr, value){
+			let index = arr.findIndex((e)=>e === value);
+			return arr.slice().splice(index >= 0 ? index : arr.length);
+		}
+
+		console.log(array_skip_until(testData, 2));
+		console.log(array_skip_until(testData, "Rafshan"));
+		console.log(array_skip_until(testData, "asd"));
+
+console.log("//////////////////////////////////////////////////////////////////////");
+
+		console.log("9. Создать функцию которая нормализует данные в массиве исключая или преобразуя не подходящие.");
+
+//Доступные шаблоны: 
+//'string' => строки, 
+//'number' => числа, 
+//'int' => целые числа, 
+//'float' => числа с плавающей точкой, 
+//'bool' => true | false, 
+//'function' => функция, 
+//'array' => массив, 
+//Object => объект {name: 'string'}
+//Синтаксис: array_normalize(arr: array, shema: string|Object[, transform: bool = false]): any[]
+//Пример: 
+//let result = array_normalize(testData4, 'string') // ['Vasya', 'colya@example.com', 'Rafshan', 'ashan@example.com']
+//let result2 = array_normalize(testData4, 'string', true) // ['1', '2', '1990', '85', '24', 'Vasya', 'colya@example.com', 'Rafshan', 'ashan@example.com']
+//let result3 = array_normalize(testData4, {age: 'float'}) // []
+//let result4 = array_normalize(testData4, {age: 'float'}, true) // [{age: 20}, {age: 34}, {age: 46}, {age: 16}, {age: 99}, {age: 11}]
+
+		function isInt(n){
+		    return Number(n) === n && n % 1 === 0;
+		}
+
+		function isFloat(n){
+		    return Number(n) === n && n % 1 !== 0;
+		}
+
+		function transform_f(accum, curr, shema){
+			if((shema == 'number' || shema == 'int' || shema == 'float') && !isNaN(curr)){
+				if(shema == 'number')
+					accum.push(Number(curr));
+				else if(shema == 'int')
+					accum.push(parseInt(Number(curr)));
+				else if(shema == 'float')
+					accum.push(parseFloat(Number(curr)));
+			} else if(shema == 'string' && typeof curr != "object"){
+				accum.push(curr.toString());
+			} else if((shema == 'bool' ||  shema == "boolean") && !isNaN(curr)){
+				accum.push(Boolean(curr));
+			} else if(shema == 'array'){
+					if(Array.isArray(curr) || (!Array.isArray(curr) && Array.from(curr).length))
+						accum.push(Array.from(curr));
+			} else if(typeof shema == 'object' && typeof curr == 'object'){
+					let obj = {};
+				for(i in shema){
+					if((shema[i] == "int" && !isNaN(curr[i]) && isInt(curr[i])) 
+						||(shema[i] == "float" && !isNaN(curr[i]) && isFloat(curr[i]))
+						||shema[i] == "bool" && typeof curr[i] == "boolean"
+						||shema[i] == "array" && Array.isArray(cur[i])
+						||typeof curr[i] == "object"
+						||typeof curr[i] == shema[i]) obj[i] = curr[i];
+				}
+				if(Object.keys(shema).every(key => obj[key] != undefined)) accum.push(obj);
+			}	
+		}
+
+		function array_normalize(arr, shema, transform = false){
+			return arr.reduce((accum, curr)=>{
+				if(transform && typeof curr != shema){
+					transform_f(accum, curr, shema);			
+				} 
+				else if ((shema == "int" && !isNaN(curr) && isInt(curr)) 
+					||(shema == "float" && !isNaN(curr) && isFloat(curr))
+					||shema == "bool" && typeof curr == "boolean"
+					||shema == "array" && Array.isArray(curr)
+					||typeof curr == "object" && Object.keys(curr).every(key => shema[key] != undefined && !Array.isArray(curr) )
+					||typeof curr == shema) accum.push(curr);
+				return accum;
+			}, []);
+		}
+		console.log(array_normalize(testData4, {"name":"Vasya","email":"vasya@example.com","age":20}));
+		console.log(array_normalize(testData4, "bool"));
+		console.log(array_normalize(testData4, "boolean"));
+		console.log(array_normalize(testData4, "float"));
+		console.log(array_normalize(testData4, "number"));
+		console.log(array_normalize(testData4, "string"));
+		console.log(array_normalize(testData4, {age: 'string'}));
+		console.log(array_normalize(testData4, {name:"string",email:"string"}));
+		console.log(array_normalize(testData4, {name:"string",email:"string", age:"number"}));
+		console.log(array_normalize(testData4, {age: 'string'}, true));
+		console.log(array_normalize(testData4, {age: 'number'}, true));
+		console.log(array_normalize(testData4, {age: 'float'}, true));
+		console.log(array_normalize(testData4, "string", true));
+
+console.log("//////////////////////////////////////////////////////////////////////");
+
+		console.log("10. Сделать функцию которая возвращает уникальные элементы массива.")	
+
+//Синтаксис: array_unique(arr: array): any[]
+//Пример:
+//let result = array_unique(testData.concat(testData2)) // [1, 2, 1990, 85, 24, 5, 7, 8.1, "Vasya", "colya@example.com", "Rafshan", "ashan@example.com", true, false]
+
+		function array_unique(arr){
+		    var arr_unique = [];
+		    for (var i = 0; i<arr.length; i++)
+		        if (arr_unique.indexOf(arr[i]) === -1 && arr[i] !== '')
+		            arr_unique.push(arr[i]);
+		    return arr_unique;
+		}
+		console.log(array_unique(testData.concat(testData2)));
+
+console.log("//////////////////////////////////////////////////////////////////////");
+
+		console.log("11. Сделать функцию которая сможет делать срез данных с ассоциативного массива.");
+
+//Синтаксис: array_pluck(arr: array, path: string): any[]
+//Пример:
+//let result = array_pluck(testData3, 'name') // ["Vasya", "Dima", "Colya", "Misha", "Ashan", "Rafshan"]
+//let result2 = array_pluck(testData3, 'skills.php') // [0, 5, 8, 6, 0, 0]
+
+		function array_pluck(arr, path){
+			path = path.split('.');
+			return arr.reduce((accum, curr)=>{
+				for(let i = 0, currDeep = curr; i<path.length; i++){
+					if(i == path.length - 1 && currDeep[path[i]] != undefined) accum.push(currDeep[path[i]]);
+					currDeep = currDeep[path[i]];
+				}
+				return accum;
+			},[]);
+		}
+
+		console.log(array_pluck(testData3, 'name'));
+		console.log(array_pluck(testData3, 'skills.php'));
+		console.log(array_pluck(testData3, 'skills.php.php'));
+
+console.log("//////////////////////////////////////////////////////////////////////");
+
+		console.log("12. Создать функцию которая создает объект на основании двух представленных массивов используя один как ключи, а другой как значения. Не подходящие ключи массивов должны быть исключены.");
+
+//Синтаксис: array_combine(keys: array, values: array): Object
+//Пример: 
+//let result = array_combine(testData, testData2) // {1: 1, 2: 2, 1990: 1990, 85: 85, 24: 24, "Vasya": 5, "colya@example.com": 7, "Rafshan": 8.1, "ashan@example.com": undefined}
+
+    	function array_combine(keys, values){
+    		return keys.reduce((accum, curr, i) => {
+       				if(typeof curr != 'boolean' && typeof curr != 'object' && typeof curr != undefined) 
+       					accum[curr] = values[i];
+       				return accum;
+    		}, {});
+    	}
+
+    	console.log(array_combine(testData, testData2));
+    </script>
+  </body>
+</html>
